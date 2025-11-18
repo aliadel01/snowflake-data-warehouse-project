@@ -1,0 +1,30 @@
+id: workflow
+namespace: my_project
+
+tasks:
+  # 1. Bronze
+  - id: load_bronze
+    type: io.kestra.core.tasks.scripts.Bash
+    properties:
+      commands:
+        - "python3 /app/scripts/bronze/load_bronze.py"
+
+  # 2. Silver
+  - id: transform_silver
+    type: io.kestra.plugin.dbt.tasks.DbtRun
+    properties:
+      dbtPath: /app/dbt12
+      models:
+        - silver.*
+    depends_on:
+      - load_bronze
+
+  # 3. Gold
+  - id: transform_gold
+    type: io.kestra.plugin.dbt.tasks.DbtRun
+    properties:
+      dbtPath: /app/dbt12
+      models:
+        - gold.*
+    depends_on:
+      - transform_silver

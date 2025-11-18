@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  kestra:
+    image: kestra/kestra:latest-full
+    environment:
+      # Optional: set an example user/pass
+      - KESTRA_CONFIGURATION_SERVER_LOGIN_USERNAME=user
+      - KESTRA_CONFIGURATION_SERVER_LOGIN_PASSWORD=password
+    ports:
+      # Kestra Web UI & API
+      - "8080:8080"
+    volumes:
+      # 1. MOUNT KESTRA FLOWS (YAML files)
+      # Assuming your flow files are now in a top-level 'kestra' folder
+      - ./kestra:/app/flows
+      
+      # 2. MOUNT DBT PROJECT FOLDER
+      # Maps your local dbt project into the Kestra container
+      - ./dbt12:/app/dbt12 
+      
+      # 3. Kestra's internal data storage
+      - kestra_data:/app/data
+
+volumes:
+  kestra_data:
