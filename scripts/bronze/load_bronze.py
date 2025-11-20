@@ -3,7 +3,7 @@
 Load Bronze Layer (Source -> Bronze)
 ===============================================================================
 '''
-
+import os
 import pandas as pd
 from snowflake.snowpark import Session
 import configparser
@@ -11,9 +11,12 @@ import logging
 import sys
 import time
 
+
 # ==========================================
 # Logging Configuration
 # ==========================================
+os.makedirs("logs", exist_ok=True)
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s",
